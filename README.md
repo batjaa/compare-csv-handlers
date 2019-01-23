@@ -1,5 +1,7 @@
 Test results:
 
+Tests were run using 2 csv files one 77mb and the other 50mb.
+
 ```bash
 $ php Native.php
 Time: 3.8263728618622
