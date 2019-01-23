@@ -10,8 +10,20 @@ function measureResource($callback) {
     $callback();
 
     printf('Time: %s' . PHP_EOL, microtime(true) - $startTime);
-    printf('Memory get usage: %s kb' . PHP_EOL, (memory_get_usage() - $startMemoryGetUsage)/1024);
-    printf('Memory get real usage: %s kb' . PHP_EOL, (memory_get_usage(true) - $startMemoryGetRealUsage)/1024);
-    printf('Memory get peak usage: %s kb' . PHP_EOL, (memory_get_peak_usage() - $startMemoryGetPeakUsage)/1024);
-    printf('Memory get peak real usage: %s kb' . PHP_EOL, (memory_get_peak_usage(true) - $startMemoryGetPeakRealUsage)/1024);
+    printf('Memory get usage: %s' . PHP_EOL, formatBytes(memory_get_usage() - $startMemoryGetUsage));
+    printf('Memory get real usage: %s' . PHP_EOL, formatBytes(memory_get_usage(true) - $startMemoryGetRealUsage));
+    printf('Memory get peak usage: %s' . PHP_EOL, formatBytes(memory_get_peak_usage() - $startMemoryGetPeakUsage));
+    printf('Memory get peak real usage: %s' . PHP_EOL, formatBytes(memory_get_peak_usage(true) - $startMemoryGetPeakRealUsage));
+}
+
+function formatBytes($bytes, $precision = 2) {
+    $units = array("b", "kb", "mb", "gb", "tb");
+
+    $bytes = max($bytes, 0);
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+    $pow = min($pow, count($units) - 1);
+
+    $bytes /= (1 << (10 * $pow));
+
+    return round($bytes, $precision) . " " . $units[$pow];
 }
